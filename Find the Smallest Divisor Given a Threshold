@@ -1,0 +1,62 @@
+Approach  - 1 (Brute Force) Time Limit will exceed.
+
+class Solution 
+{
+    public int smallestDivisor(int[] nums, int threshold) 
+    {
+        int divisor = 1, sum = 0;
+        while(divisor > 0)
+        {
+            sum = 0;
+            for(int i = 0; i < nums.length; i++)
+            {
+                if(nums[i] % divisor != 0)
+                    sum = sum + (nums[i] / divisor) + 1;
+                else
+                    sum = sum + (nums[i] / divisor);
+            }
+            if(sum <= threshold)
+                break;
+            else
+                divisor++;
+        }
+        return divisor;
+    }
+}
+
+
+Approach  - 2 (Using Binary Search)
+
+class Solution 
+{
+    
+    public long findSum(int[] nums, int divisor)
+    {
+        long sum = 0;
+        for(int n : nums)
+        {
+            sum = sum + (n / divisor) + (n % divisor == 0 ? 0 : 1);
+        }
+        return sum;
+    }
+    public int smallestDivisor(int[] nums, int threshold) 
+    {
+        int left = 1, right = 2;
+        while(findSum(nums, right) > threshold)
+        {
+            left = right;
+            right <<= 1;
+        }
+        
+        while(left <= right)
+        {
+            int p = left + ((right - left) >> 1);
+            long sum = findSum(nums, p);
+            if(sum > threshold)
+                left = p + 1;
+            else
+                right = p - 1;
+        }
+        return left;
+    }
+}
