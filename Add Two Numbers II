@@ -1,0 +1,68 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution 
+{
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) 
+    {
+       int size1 = size(l1), size2 = size(l2);
+       if(size1>size2)
+         return addTwoNumbers(l1,l2,size1-size2);
+       else
+         return addTwoNumbers(l2,l1,size2-size1);
+    }
+    
+    private ListNode addTwoNumbers(ListNode l1,ListNode l2,int diff)
+    {
+      while(diff-->0)
+      {
+        ListNode temp = l2;
+        l2 = new ListNode(0);
+        l2.next = temp;
+      }
+      
+      ListNode curr = add(l1,l2);
+      if(curr.val>9)
+      {
+        ListNode result = new ListNode(curr.val/10);
+        curr.val%=10;
+        result.next = curr;
+        return result;
+      }
+      else
+        return curr;
+    }
+  
+    private ListNode add(ListNode l1, ListNode l2)
+    {
+      if(l1==null || l2 == null)
+        return null;
+      ListNode nextNode = add(l1.next,l2.next);
+      int carry = 0;
+      if(nextNode!=null && nextNode.val>9)
+      {
+        carry = nextNode.val/10;
+        nextNode.val%=10;
+      }
+      ListNode curr = new ListNode(l1.val+l2.val+carry);
+      curr.next = nextNode;
+      return curr;
+    }
+  
+    private int size(ListNode l1)
+    {
+      int size = 0;
+      while(l1!=null)
+      {
+        l1=l1.next;size++;
+      }
+      return size;
+    }  
+}
